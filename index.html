@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Code Practice</title>
+  <style>
+    :root{--gap:12px;--radius:8px}
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;margin:18px;background:#f6f8fa;color:#111}
+    header{display:flex;align-items:center;justify-content:space-between;gap:var(--gap);margin-bottom:16px}
+    h1{font-size:1.1rem;margin:0}
+    .container{display:grid;grid-template-columns:1fr 420px;gap:16px;align-items:start}
+    .panel{background:#fff;border:1px solid #e6e8eb;padding:12px;border-radius:var(--radius);box-shadow:0 1px 0 rgba(0,0,0,0.03)}
+    textarea{width:100%;height:300px;border:1px solid #d9dee6;border-radius:6px;padding:10px;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:13px;resize:vertical}
+    .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    button{background:#0366d6;color:#fff;border:none;padding:8px 10px;border-radius:6px;cursor:pointer}
+    button.secondary{background:#6a737d}
+    iframe{width:100%;height:420px;border:1px solid #d9dee6;border-radius:6px}
+    .tips{font-size:13px;color:#444;margin-top:8px}
+    @media (max-width:900px){.container{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Basic Code Practice</h1>
+    <div style="font-size:13px;color:#444">Edit the code and click Run →</div>
+  </header>
+
+  <div class="container">
+    <main class="panel">
+      <label for="editor"><strong>HTML / CSS / JS</strong></label>
+      <textarea id="editor" spellcheck="false">
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Preview</title>
+    <style>
+      body{font-family:system-ui;padding:20px;line-height:1.4}
+      .card{padding:16px;border-radius:8px;background:#fff;border:1px solid #e7e9ee;max-width:420px}
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h2>Hello, practice!</h2>
+      <p>Change this text, styles, or add JS below.</p>
+      <button id="btn">Click me</button>
+    </div>
+
+    <script>
+      document.getElementById('btn').addEventListener('click', () => {
+        alert('Button clicked from the preview iframe!');
+      });
+    </script>
+  </body>
+</html>
+      </textarea>
+
+      <div class="controls">
+        <button id="runBtn">Run →</button>
+        <button id="resetBtn" class="secondary">Reset</button>
+        <button id="downloadBtn" class="secondary">Download .html</button>
+      </div>
+
+      <div class="tips">
+        Tips: Try editing HTML, CSS and inline JS. Use the Download button to save your file.
+      </div>
+    </main>
+
+    <aside class="panel">
+      <strong>Live Preview</strong>
+      <iframe id="preview" title="Live preview"></iframe>
+
+      <div style="margin-top:12px;font-size:13px;color:#444">
+        Keyboard: Ctrl/Cmd+Enter to run. The preview runs isolated inside an iframe.
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const editor = document.getElementById('editor');
+    const preview = document.getElementById('preview');
+    const runBtn = document.getElementById('runBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const initial = editor.value;
+
+    function run() {
+      // Use srcdoc to render the HTML/CSS/JS safely inside the iframe
+      preview.srcdoc = editor.value;
+    }
+
+    runBtn.addEventListener('click', run);
+    resetBtn.addEventListener('click', () => {
+      editor.value = initial;
+      run();
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const blob = new Blob([editor.value], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'practice.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Keyboard shortcut: Ctrl/Cmd + Enter to run
+    editor.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        run();
+      }
+    });
+
+    // Initial render
+    run();
+  </script>
+</body>
+</html>
